@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApp", "ServerApp\ServerApp.csproj", "{33DFC8ED-EC92-4EDE-B964-3B9529ADFBF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApp", "ClientApp\ClientApp.csproj", "{E6271A88-7302-4306-9AC3-E60C1F238430}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{5CBCE520-A443-4671-A1EC-29DDAC393357}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33DFC8ED-EC92-4EDE-B964-3B9529ADFBF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33DFC8ED-EC92-4EDE-B964-3B9529ADFBF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33DFC8ED-EC92-4EDE-B964-3B9529ADFBF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33DFC8ED-EC92-4EDE-B964-3B9529ADFBF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6271A88-7302-4306-9AC3-E60C1F238430}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6271A88-7302-4306-9AC3-E60C1F238430}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6271A88-7302-4306-9AC3-E60C1F238430}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6271A88-7302-4306-9AC3-E60C1F238430}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CBCE520-A443-4671-A1EC-29DDAC393357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CBCE520-A443-4671-A1EC-29DDAC393357}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CBCE520-A443-4671-A1EC-29DDAC393357}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CBCE520-A443-4671-A1EC-29DDAC393357}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {03E9D3D8-CB01-4540-9500-D33A0CA524D7}
+	EndGlobalSection
+EndGlobal
