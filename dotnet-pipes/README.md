@@ -91,7 +91,7 @@ https://github.com/LA777/Articles/blob/0db3034cd4710d4d8e2b6ac7ada73ba181116200/
 <details>
   <summary>Code example: Client Application</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/AnonymousPipesInterprocess/ClientApp/Program.csL1-L40
+https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/AnonymousPipesInterprocess/ClientApp/Program.cs#L1-L40
 
 </details>
 
