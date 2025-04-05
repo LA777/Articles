@@ -1,4 +1,4 @@
-# C# .Net Pipes
+# C# .NET Pipes
 
 For 12 years working as a Full Stack software developer, I have never used Pipes in the commercial projects. Nevertheless, I have used Pipes in my Pet projects for Console applications.
 Pipes are used to communication between Processes and standalone applications. Also, Pipes can be used for communication between threads. Moreover, Pipes can be used for communication via network.
