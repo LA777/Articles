@@ -81,6 +81,8 @@ Starting .NET 8, the Client Handle owned by a server that was created for out-of
 
 Let's illustrate how to use anonymous pipes to enable communication between a parent and child process.
 
+https://github.com/LA777/Articles/blob/0db3034cd4710d4d8e2b6ac7ada73ba181116200/dotnet-pipes/src/AnonymousPipesInterprocess/ServerApp/Program.cs#L1C1-L80C2
+
 <details>
   <summary>Server Application</summary>
 
