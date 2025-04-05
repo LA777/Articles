@@ -81,15 +81,17 @@ Starting .NET 8, the Client Handle owned by a server that was created for out-of
 
 Let's illustrate how to use anonymous pipes to enable communication between a parent and child process.
 
+### Code example
+
 <details>
-  <summary>Code example: Server Application</summary>
+  <summary>Server Application</summary>
 
 https://github.com/LA777/Articles/blob/0db3034cd4710d4d8e2b6ac7ada73ba181116200/dotnet-pipes/src/AnonymousPipesInterprocess/ServerApp/Program.cs#L1-L80
 
 </details>
 
 <details>
-  <summary>Code example: Client Application</summary>
+  <summary>Client Application</summary>
 
 https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/AnonymousPipesInterprocess/ClientApp/Program.cs#L1-L40
 
@@ -169,10 +171,12 @@ exit
 
 Quite similar but with some changes we can use Anonymous Pipe for communication between threads.
 
-<details>
-  <summary>Code example</summary>
+### Code example
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/AnonymousPipesMultiThreading/Program.cs
+<details>
+  <summary>Application</summary>
+
+https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/AnonymousPipesMultiThreading/Program.cs#L1-L65
 
 </details>
 
@@ -383,17 +387,19 @@ public NamedPipeClientStream(PipeDirection direction, bool isAsync, bool isConne
 
 The code below provides a practical example of interprocess communication with Named Pipes, showcasing how a server and client application can exchange data.
 
+### Code example
+
 <details>
   <summary>Server Application</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesInterprocess/ServerApp/Program.cs
+https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesInterprocess/ServerApp/Program.cs#L1-L87
 
 </details>
 
 <details>
   <summary>Client Application</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesInterprocess/ClientApp/Program.cs
+https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesInterprocess/ClientApp/Program.cs#L1-L56
 
 </details>
 
@@ -496,10 +502,12 @@ exit
 
 The example below shows how to use Named Pipes for Multi Threading Communication.
 
-<details>
-  <summary>Code Example</summary>
+### Code example
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesMultiThreading/Program.cs
+<details>
+  <summary>Application</summary>
+
+https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesMultiThreading/Program.cs#L1-L95
 
 </details>
 
@@ -600,24 +608,26 @@ Using Named Pipes for internetwork communication introduces specific considerati
 
 The following code example illustrates a scenario involving the same user account on both machines.
 
+### Code example
+
 <details>
   <summary>Server Application (same user - .Net 8)</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ServerApp/Program.cs
+https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ServerApp/Program.cs#L1-L52
 
 </details>
 
 <details>
   <summary>Client Application</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ClientApp/Program.cs
+https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ClientApp/Program.cs#L1-L56
 
 </details>
 
 <details>
   <summary>Server Application (any user - .Net Framework)</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ServerAppAnyUser/Program.cs
+https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ServerAppAnyUser/Program.cs#L1-L82
 
 </details>
 
