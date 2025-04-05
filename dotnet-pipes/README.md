@@ -84,7 +84,7 @@ Let's illustrate how to use anonymous pipes to enable communication between a pa
 <details>
   <summary>Server Application</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/AnonymousPipesInterprocess/ServerApp/Program.cs
+https://github.com/LA777/Articles/blob/0db3034cd4710d4d8e2b6ac7ada73ba181116200/dotnet-pipes/src/AnonymousPipesInterprocess/ServerApp/Program.cs#L1C1-L80C2
 
 </details>
 
