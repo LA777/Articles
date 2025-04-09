@@ -1,5 +1,8 @@
 ﻿using Common;
 using System.IO.Pipes;
+using System.Runtime.Versioning;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace ServerApp;
 
@@ -7,13 +10,31 @@ internal static class Program
 {
     private const string PipeName = "pipe038371";
 
+    [SupportedOSPlatform("windows")]
     private static async Task Main()
     {
         WriteLine("Started.");
+        WriteLine(Environment.MachineName);
+
+        var pipeSecurity = new PipeSecurity();
+
+        var currentUserSid = WindowsIdentity.GetCurrent().User;
+        if (currentUserSid != null)
+        {
+            pipeSecurity.AddAccessRule(new PipeAccessRule(currentUserSid, PipeAccessRights.FullControl, AccessControlType.Allow));
+        }
+
+        var administratorsSid = new SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid, null);
+        pipeSecurity.AddAccessRule(new PipeAccessRule(administratorsSid, PipeAccessRights.FullControl, AccessControlType.Allow));
+
+        var everyoneSid = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+        pipeSecurity.AddAccessRule(new PipeAccessRule(everyoneSid, PipeAccessRights.ReadWrite, AccessControlType.Allow));
 
         try
         {
-            await using var pipeServerStream = new NamedPipeServerStream(PipeName, PipeDirection.InOut);
+            await using var pipeServerStream = NamedPipeServerStreamAcl.Create(PipeName, PipeDirection.InOut, 1,
+                PipeTransmissionMode.Byte, PipeOptions.None, 0, 0, pipeSecurity);
+
             WriteLine("Waiting Client to connect...");
             await pipeServerStream.WaitForConnectionAsync();
 
@@ -39,7 +60,7 @@ internal static class Program
         }
         catch (IOException exception)
         {
-            WriteLine($"Error: {exception.Message}");
+            WriteLine($"ERROR: {exception.Message}");
         }
 
         WriteLine("Quit.");
