@@ -33,7 +33,7 @@ internal static class Program
         try
         {
             await using var pipeServerStream = NamedPipeServerStreamAcl.Create(PipeName, PipeDirection.InOut, 1,
-                PipeTransmissionMode.Byte, PipeOptions.None, 0, 0, pipeSecurity);
+                PipeTransmissionMode.Byte, PipeOptions.Asynchronous, 1024, 1024, pipeSecurity);
 
             WriteLine("Waiting Client to connect...");
             await pipeServerStream.WaitForConnectionAsync();

@@ -15,13 +15,17 @@ There are two types of Pipes: Anonymous pipes and Named Pipes. Anonymous pipes r
 | **Pipe Handles** | Required (inherited by child process) | No (accessed by name) | Anonymous pipes rely on file handles; named pipes are accessed using a path-like name. |
 | **Impersonation Support** | No | Yes (server can impersonate the client) | Impersonation allows the server to act on behalf of the client, useful for access control. |
 | **Transmission Mode** | Byte stream | Byte stream or Message (discrete packets) | Named pipes support message mode, which preserves message boundaries. |
-| **Security** | Inherited from parent process | <span style="background-color:brown;">Configurable Security Descriptor (SD)</span> | Named pipes allow for finer-grained security control. |
+| **Security** | Inherited from parent process | Explicitly defines the security settings | Named pipes allow for finer-grained security control. |
 | **Persistence** | Ephemeral (destroyed when last handle closes) | Persistent (can exist beyond the lifetime of the creating process) | Named pipes can be designed to persist, while anonymous pipes are inherently temporary. |
-| **Naming Convention** | None (handles only) | <span style="background-color:brown;">`\\.\pipe\<pipename>` (local) or `\\<servername>\pipe\<pipename>` (network) </span>| Named pipes are identified by their names, allowing for easy discovery and connection. |
+| **Naming Convention** | None (handles only) | Identified by unique string-based names </span>| Named pipes are identified by their names, allowing for easy discovery and connection. |
 
 ### Security Considerations
 
-Named pipes can be secured using Windows security features. When creating a named pipe, you can specify a <span style="background-color:brown;">security descriptor</span> that controls who can connect to the pipe, who can read from or write to the pipe, etc.
+Named pipes can be secured using Windows security features. When creating a named pipe, you can specify a security descriptor that controls who can connect to the pipe, who can read from or write to the pipe, etc.
+
+* **Anonymous Pipes**: Primarily for local, unidirectional communication between related processes (e.g., parent-child). Security relies on the handles not being leaked; if an unauthorized process gains a handle, it can read or write. No inherent access control mechanisms.
+
+* **Named Pipes**: Allow bidirectional communication between unrelated processes, locally or across a network. Security is managed through Windows security descriptors (ACLs) that control which users or groups have read, write, or full access. Proper configuration of these ACLs is crucial to prevent unauthorized access and potential impersonation attacks. Treat pipe communication as a trust boundary.
 
 ## Anonymous pipes
 
@@ -611,29 +615,30 @@ The following code example illustrates a scenario involving the same user accoun
 ### Code example
 
 <details>
-  <summary>Server Application (same user - .Net 8)</summary>
+  <summary>Server Application (any user)</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ServerApp/Program.cs#L1-L52
+https://github.com/LA777/Articles/blob/de405280451172fd75d7eb34a53ca567a060ee42/dotnet-pipes/src/NamedPipesNetwork/ServerApp/Program.cs#L1-L73
 
 </details>
 
 <details>
   <summary>Client Application</summary>
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ClientApp/Program.cs#L1-L56
+https://github.com/LA777/Articles/blob/b39e7aedc58ab1194c5d7a5e4f0a5c42436e533c/dotnet-pipes/src/NamedPipesNetwork/ClientApp/Program.cs#L1-L60
 
 </details>
 
-<details>
-  <summary>Server Application (any user - .Net Framework)</summary>
+### Code Explanation
 
-https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/dotnet-pipes/src/NamedPipesNetwork/ServerAppAnyUser/Program.cs#L1-L82
-
-</details>
-
-### Explanation
-
-1. Server Application - same user (.Net 8):
+1. Server Application - any user:
+   * **Namespaces**:
+     * `System.Security.AccessControl`: Enables manipulation of access control lists (ACLs) for securable objects.
+     * `System.Security.Principal`: Provides classes for representing user and group identities.
+   * **Pipe Security Setup**: A `PipeSecurity` object is created to manage access control for the named pipe.
+   * **Allow Current User**: It retrieves the current user's identity.
+     * A `PipeAccessRule` is created to grant the current user `PipeAccessRights.FullControl` and added to the `pipeSecurity`.
+   * **Allow Administrators**: A `SecurityIdentifier` is created for the built-in Administrators group (`WellKnownSidType.BuiltinAdministratorsSid`). A `PipeAccessRule` grants `FullControl` to the Administrators group.
+   * **Allow Everyone (Less Secure)**: A `SecurityIdentifier` is created for the "Everyone" group (`WellKnownSidType.WorldSid`). A `PipeAccessRule` grants `ReadWrite` to everyone. **Note**: This setup is "less secure" but used for simplicity in the example. In a production environment, granting `ReadWrite` control to everyone is generally discouraged.
    * **Pipe Creation**: It creates a `NamedPipeServerStream` using the defined `PipeName` and `PipeDirection.InOut` to enable bidirectional communication.
    * **Client Connection**: The server waits for a client to connect using `pipeServerStream.WaitForConnectionAsync()`, which blocks until a connection is established.
    * **Communication**: A `StringPipe` object (a custom class for handling string-based communication) is created. The server sends a "SYNC" message to the client to indicate it's ready for communication. It logs "Client connected." and the pipe's `TransmissionMode`. The server enters a loop that reads input from the console and sends it to the client via `stringPipe.WriteStringAsync()`. This continues until the user enters "EXIT" (case-insensitive). After the loop, the server reads a message from the client using `stringPipe.ReadStringAsync()` and logs the received message.
@@ -642,20 +647,10 @@ https://github.com/LA777/Articles/blob/da69b207dfd3d1fbd69ce95aef0aed1e7d686887/
    * **Pipe Connection**: It creates a `NamedPipeClientStream` using the `ServerName` and `PipeName`, specifying `PipeDirection.InOut` for bidirectional communication. It attempts to connect to the server using `pipeClientStream.ConnectAsync()`. It logs "Connected to server." and the pipe's `TransmissionMode`.
    * **Communication**: A `StringPipe` object is created for duplex string-based communication. The client enters a loop to wait for and read the "SYNC" message from the server. After receiving "SYNC," it enters another loop to read messages from the server using `stringPipe.ReadStringAsync()` and logs the received text. This loop continues until the server sends "EXIT" (case-insensitive). The client then sends a "Bye-bye." message to the server.
 
-3. Server Application - any user (.Net Framework):
-   * **Namespaces**:
-     * `System.Security.AccessControl`: Enables manipulation of access control lists (ACLs) for securable objects.
-     * `System.Security.Principal`: Provides classes for representing user and group identities.
-   * **Pipe Security Setup**: A `PipeSecurity` object is created to manage access control for the named pipe.
-     * **Allow Current User**: It retrieves the current user's identity (`Environment.UserDomainName + "\\" + Environment.UserName`).
-     * A `PipeAccessRule` is created to grant the current user `PipeAccessRights.FullControl` and added to the `pipeSecurity`.
-   * **Allow Administrators**: A `SecurityIdentifier` is created for the built-in Administrators group (`WellKnownSidType.BuiltinAdministratorsSid`). A `PipeAccessRule` grants `FullControl` to the Administrators group.
-   * **Allow Everyone (Less Secure)**: A `SecurityIdentifier` is created for the "Everyone" group (`WellKnownSidType.WorldSid`). A `PipeAccessRule` grants `FullControl` to everyone. **Note**: The code comments explicitly mention this is "less secure" but used for simplicity in the example. In a production environment, granting full control to everyone is generally discouraged.
-
 ### Named Pipe Server Creation and Communication
 
-A `NamedPipeServerStream` is created within a using statement (for automatic resource disposal).
-The constructor takes several parameters:
+A `NamedPipeServerStreamAcl` is created within a using statement (for automatic resource disposal).
+The `Create` method takes several parameters:
 
 * `PipeName`: The name of the pipe.
 * `PipeDirection.InOut`: For bidirectional communication.
@@ -674,22 +669,12 @@ The constructor takes several parameters:
 ### Key Differences and Improvements
 
 * **Security**: This code explicitly sets security permissions on the named pipe, which is the most important distinction. This allows connections from users other than the one running the server.
-* **.NET Framework**: This code is specifically designed for the .NET Framework, where setting pipe security for arbitrary users is supported. .NET Core and .NET (versions 5+) have differences in how security contexts are handled with named pipes, particularly for cross-machine scenarios.
 * `PipeSecurity`: The `PipeSecurity` class is used to define access rules. You can grant or deny various `PipeAccessRights` (e.g., `Read`, `Write`, `CreateNewInstance`, `FullControl`) to specific users or groups.
 * **Security Identifiers**: The `SecurityIdentifier` class is used to represent Windows security principals (users, groups, etc.). `WellKnownSidType` provides constants for common SIDs (e.g., `Administrators`, `Everyone`).
 
 ### Important Security Note
 
-While this code demonstrates how to allow connections from "Everyone" for simplicity, it's crucial to understand the security implications. In real-world applications, you should carefully define the minimum necessary permissions and grant them only to the specific users or groups that need to access the pipe. Granting full control to "Everyone" can expose your application to security risks.
-
-**Key Points**:
-
-* This example demonstrates basic client-server communication using Named Pipes.
-* Both applications use a custom `StringPipe` class to simplify string sending and receiving over the pipe.
-* The client connects to the server by name (`ServerName`).
-* The "SYNC" message is used for initial synchronization between the client and server.
-* The communication is bidirectional (`PipeDirection.InOut`).
-* Error handling is included to catch potential `IOExceptions`.
+While this code demonstrates how to allow connections from "Everyone" for simplicity, it's crucial to understand the security implications. In real-world applications, you should carefully define the minimum necessary permissions and grant them only to the specific users or groups that need to access the pipe. Granting full control or write permission to `Everyone` can expose your application to security risks.
 
 ### Console output
 
