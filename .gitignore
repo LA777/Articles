@@ -426,3 +426,4 @@ FodyWeavers.xsd
 Thumbs.db
 Desktop.ini
 .DS_Store
+**/package-lock.json
