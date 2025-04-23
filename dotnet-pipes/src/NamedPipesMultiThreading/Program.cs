@@ -1,5 +1,4 @@
 ﻿using System.IO.Pipes;
-using System.Text;
 
 namespace NamedPipesMultiThreading;
 
@@ -73,7 +72,7 @@ internal static class Program
                 text = stringPipe.ReadString();
                 WriteLine($"[CLIENT] Received: {text}");
             }
-            while (text is not null && !text.Equals("EXIT", StringComparison.CurrentCultureIgnoreCase));
+            while (!string.IsNullOrWhiteSpace(text) && !text.Equals("EXIT", StringComparison.CurrentCultureIgnoreCase));
 
             WriteLine("[CLIENT] Write data to Server.");
             stringPipe.WriteString("Hello from Client.");

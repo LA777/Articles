@@ -21,7 +21,7 @@ namespace Common
             var byte2 = _pipeStream.ReadByte();
             var bufferLength = (short)(byte1 | (byte2 << 8));
             var inputBuffer = new byte[bufferLength];
-            await _pipeStream.ReadAsync(inputBuffer, 0, bufferLength);
+            _ = await _pipeStream.ReadAsync(inputBuffer, 0, bufferLength);
 
             return _streamEncoding.GetString(inputBuffer);
         }
